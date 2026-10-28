@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# OS & Android
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Logs & temp
+*.log

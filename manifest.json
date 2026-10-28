@@ -1,0 +1,18 @@
+{
+  "name": "Froggy Jump 2D",
+  "short_name": "FroggyJump",
+  "description": "Веб-игра про прыгающего по кувшинкам лягушонка для Android",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#121c18",
+  "theme_color": "#121c18",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%234caf50'/><circle cx='35' cy='35' r='10' fill='white'/><circle cx='65' cy='35' r='10' fill='white'/><circle cx='35' cy='35' r='5' fill='black'/><circle cx='65' cy='35' r='5' fill='black'/><path d='M30,65 Q50,80 70,65' stroke='%231b5e20' stroke-width='4' fill='none'/></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
