@@ -1154,24 +1154,53 @@
 
   // --- Обработчики ввода (Сенсор, Клавиатура, Наклон) ---
   function setupInputHandlers() {
-    // Клавиатура
-    window.addEventListener('keydown', e => {
-      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = true;
-      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = true;
-      if (e.key === ' ' || e.key === 'p' || e.key === 'Escape') {
-        if (gameState === STATE.PLAYING) pauseGame();
-        else if (gameState === STATE.PAUSED) resumeGame();
-      }
-    });
-
-    window.addEventListener('keyup', e => {
-      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
-      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
-    });
-
-    // Экранные кнопки "Влево" и "Вправо"
+    // Клавиатура (ПК: стрелочки, WASD, Пробел, Enter, Escape)
     const btnLeft = document.getElementById('btn-left');
     const btnRight = document.getElementById('btn-right');
+
+    const handleKey = (e, isDown) => {
+      // Предотвращаем скролл страницы браузера стрелками и пробелом
+      if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' ', 'Spacebar'].includes(e.key)) {
+        e.preventDefault();
+      }
+
+      // Стрелка влево или клавиша A (независимо от русской/английской раскладки через e.code)
+      if (e.key === 'ArrowLeft' || e.code === 'KeyA' || e.key === 'a' || e.key === 'A' || e.key === 'ф' || e.key === 'Ф') {
+        keys.left = isDown;
+        if (btnLeft) btnLeft.classList.toggle('active', isDown);
+      }
+
+      // Стрелка вправо или клавиша D
+      if (e.key === 'ArrowRight' || e.code === 'KeyD' || e.key === 'd' || e.key === 'D' || e.key === 'в' || e.key === 'В') {
+        keys.right = isDown;
+        if (btnRight) btnRight.classList.toggle('active', isDown);
+      }
+
+      // Действия только при нажатии (isDown = true)
+      if (isDown) {
+        sound.init();
+
+        // Старт / Перезапуск игры клавишами Space или Enter
+        if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space') {
+          if (gameState === STATE.MENU || gameState === STATE.GAMEOVER) {
+            startGame();
+            return;
+          }
+        }
+
+        // Пауза / Продолжить
+        if (e.key === 'p' || e.key === 'P' || e.key === 'Escape' || e.key === ' ' || e.code === 'Space') {
+          if (gameState === STATE.PLAYING) {
+            pauseGame();
+          } else if (gameState === STATE.PAUSED) {
+            resumeGame();
+          }
+        }
+      }
+    };
+
+    window.addEventListener('keydown', e => handleKey(e, true));
+    window.addEventListener('keyup', e => handleKey(e, false));
 
     const bindTouchButton = (btn, dir) => {
       const start = (e) => {

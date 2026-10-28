@@ -12,19 +12,22 @@
   --dark-green: #2e7d32;
   --light-green: #81c784;
   --accent-gold: #ffb300;
-  --bg-dark: #121c18;
+  --bg-dark: #0a130f;
 }
 
 html, body {
   width: 100%;
   height: 100%;
-  background: var(--bg-dark);
+  background: radial-gradient(circle at center, #13241b 0%, #080f0c 100%);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   color: #fff;
   overflow: hidden;
-  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+/* Игровой контейнер (Адаптивный под мобильные и ПК) */
 #game-wrapper {
   position: relative;
   width: 100vw;
@@ -33,9 +36,23 @@ html, body {
   margin: 0 auto;
   overflow: hidden;
   background: linear-gradient(180deg, #1e3c72 0%, #2a5298 35%, #38ef7d 100%);
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
   display: flex;
   flex-direction: column;
+}
+
+/* Стилизация для ПК / Десктопных мониторов */
+@media (min-width: 600px) and (min-height: 600px) {
+  #game-wrapper {
+    height: min(96vh, 880px);
+    border-radius: 28px;
+    border: 2px solid rgba(76, 175, 80, 0.45);
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(76, 175, 80, 0.25);
+  }
+
+  /* Подсказка управления на ПК сбоку или снизу */
+  .desktop-controls-legend {
+    display: flex !important;
+  }
 }
 
 #gameCanvas {
@@ -51,7 +68,7 @@ html, body {
   top: 0;
   left: 0;
   width: 100%;
-  padding: env(safe-area-inset-top, 10px) 14px 10px 14px;
+  padding: env(safe-area-inset-top, 14px) 14px 10px 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -61,12 +78,12 @@ html, body {
 
 .hud-group {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
 }
 
 .hud-card {
-  background: rgba(14, 28, 22, 0.75);
+  background: rgba(14, 28, 22, 0.82);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -75,7 +92,7 @@ html, body {
   display: flex;
   align-items: center;
   gap: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
 }
 
 .hud-label {
@@ -96,7 +113,7 @@ html, body {
 
 .hud-icon-btn {
   pointer-events: auto;
-  background: rgba(14, 28, 22, 0.75);
+  background: rgba(14, 28, 22, 0.82);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #fff;
   width: 38px;
@@ -108,23 +125,28 @@ html, body {
   font-size: 18px;
   cursor: pointer;
   transition: transform 0.1s, background 0.2s;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.hud-icon-btn:hover {
+  background: rgba(46, 125, 50, 0.85);
 }
 
 .hud-icon-btn:active {
   transform: scale(0.9);
-  background: rgba(46, 125, 50, 0.9);
+  background: rgba(46, 125, 50, 0.95);
 }
 
 /* Экранные сенсорные кнопки управления */
 #touch-controls {
   position: absolute;
-  bottom: calc(env(safe-area-inset-bottom, 15px) + 10px);
+  bottom: calc(env(safe-area-inset-bottom, 15px) + 12px);
   left: 0;
   width: 100%;
   padding: 0 20px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   pointer-events: none;
   z-index: 12;
 }
@@ -133,26 +155,78 @@ html, body {
   pointer-events: auto;
   width: 76px;
   height: 76px;
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 2px solid rgba(255, 255, 255, 0.4);
   border-radius: 50%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   color: #ffffff;
-  font-size: 32px;
-  font-weight: bold;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-  transition: background 0.1s, transform 0.1s;
+  transition: background 0.15s, transform 0.1s, opacity 0.2s;
   touch-action: none;
+  cursor: pointer;
+}
+
+.touch-btn-icon {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.touch-btn-key {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #c8e6c9;
+  margin-top: 2px;
+  background: rgba(0,0,0,0.3);
+  padding: 1px 5px;
+  border-radius: 6px;
 }
 
 .touch-btn.active, .touch-btn:active {
-  background: rgba(76, 175, 80, 0.65);
+  background: rgba(76, 175, 80, 0.7);
   border-color: #81c784;
   transform: scale(0.92);
+}
+
+/* На ПК с мышью кнопки делаем более полупрозрачными, но интерактивными */
+@media (hover: hover) and (pointer: fine) {
+  .touch-btn {
+    opacity: 0.45;
+  }
+  .touch-btn:hover {
+    opacity: 0.95;
+    background: rgba(76, 175, 80, 0.45);
+  }
+}
+
+/* Подсказка управления на ПК */
+.desktop-controls-legend {
+  display: none;
+  background: rgba(14, 28, 22, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: #a5d6a7;
+  font-weight: 600;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.key-badge {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-weight: 800;
+  color: #fff;
+  font-family: monospace;
 }
 
 /* Модальные окна: Меню, Пауза, Game Over */
@@ -162,7 +236,7 @@ html, body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(8, 18, 14, 0.85);
+  background: rgba(8, 18, 14, 0.88);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   display: flex;
@@ -186,7 +260,7 @@ html, body {
   border-radius: 28px;
   padding: 28px 24px;
   width: 100%;
-  max-width: 360px;
+  max-width: 380px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(76, 175, 80, 0.25);
   animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -233,7 +307,7 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .stat-box {
@@ -269,11 +343,16 @@ html, body {
   letter-spacing: 0.5px;
   cursor: pointer;
   box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
-  transition: transform 0.1s, box-shadow 0.2s;
+  transition: transform 0.1s, box-shadow 0.2s, background 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #57be5b 0%, #348a39 100%);
+  box-shadow: 0 10px 24px rgba(76, 175, 80, 0.5);
 }
 
 .btn-primary:active {
@@ -292,14 +371,40 @@ html, body {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s;
 }
 
-.btn-secondary:active {
+.btn-secondary:hover {
   background: rgba(255, 255, 255, 0.2);
 }
 
+.btn-secondary:active {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Блок подсказок по клавишам на ПК */
+.pc-keys-helper {
+  margin-top: 16px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.pc-key-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #c8e6c9;
+}
+
 .controls-hint {
-  margin-top: 18px;
+  margin-top: 14px;
   font-size: 12px;
   color: #81c784;
   display: flex;
@@ -309,7 +414,7 @@ html, body {
 }
 
 .tilt-toggle-row {
-  margin-top: 14px;
+  margin-top: 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -368,7 +473,7 @@ input:checked + .slider:before {
   transform: translateX(20px);
 }
 
-/* Предупреждение о горизонтальном режиме */
+/* Предупреждение о горизонтальном режиме — ТОЛЬКО для мобильных устройств */
 #landscape-warning {
   display: none;
   position: fixed;
@@ -386,7 +491,8 @@ input:checked + .slider:before {
   padding: 20px;
 }
 
-@media (orientation: landscape) and (max-height: 500px) {
+/* Показываем ТОЛЬКО на смартфонах с грубым тачем, чтобы ПК никогда не блокировался */
+@media (orientation: landscape) and (max-height: 500px) and (pointer: coarse) {
   #landscape-warning {
     display: flex;
   }
