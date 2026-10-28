@@ -497,3 +497,38 @@ input:checked + .slider:before {
     display: flex;
   }
 }
+
+/* Кнопки переключения языка (RU / EN) */
+.lang-toggle-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.btn-lang {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #c8e6c9;
+  border-radius: 18px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-lang:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.btn-lang.active {
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  border-color: #81c784;
+  color: #ffffff;
+  box-shadow: 0 2px 10px rgba(76, 175, 80, 0.45);
+}

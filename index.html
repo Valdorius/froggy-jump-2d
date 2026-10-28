@@ -10,6 +10,8 @@
   <title>Froggy Jump - Лягушонок-прыгун 2D</title>
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
+  <!-- Playgama Bridge SDK (Unified Multiplatform SDK) -->
+  <script src="https://bridge.playgama.com/v2/stable/playgama-bridge.js"></script>
 </head>
 <body>
   <div id="game-wrapper">
@@ -20,7 +22,7 @@
     <div id="hud">
       <div class="hud-group">
         <div class="hud-card">
-          <span class="hud-label">Высота:</span>
+          <span id="hud-score-label" class="hud-label">Высота:</span>
           <span id="hud-score" class="hud-value">0</span>
         </div>
         <div class="hud-card">
@@ -30,6 +32,7 @@
       </div>
       <div class="hud-group">
         <button id="btn-sound" class="hud-icon-btn" aria-label="Звук" title="Вкл/Выкл звук">🔊</button>
+        <button id="btn-lang" class="hud-icon-btn" aria-label="Язык / Language" title="Переключить язык / Switch language" style="font-size: 11px; font-weight: 800; min-width: 38px; padding: 0 4px;">RU</button>
         <button id="btn-pause" class="hud-icon-btn" aria-label="Пауза" title="Пауза (Пробел)">⏸</button>
       </div>
     </div>
@@ -60,41 +63,41 @@
     <div id="menu-modal" class="modal-overlay">
       <div class="modal-content">
         <div class="frog-avatar">🐸</div>
-        <h1 class="modal-title">Froggy Jump</h1>
-        <p class="modal-subtitle">Прыгай по кувшинкам, лови мушек и избегай сухих листьев!</p>
+        <h1 id="menu-title" class="modal-title">Froggy Jump</h1>
+        <p id="menu-subtitle" class="modal-subtitle">Прыгай по кувшинкам, лови мушек и избегай сухих листьев!</p>
 
         <div class="stats-grid">
           <div class="stat-box" style="grid-column: span 2;">
-            <div class="stat-title">Лучший рекорд</div>
+            <div id="menu-high-label" class="stat-title">Лучший рекорд</div>
             <div id="menu-high-score" class="stat-num">0</div>
           </div>
         </div>
 
         <button id="btn-start" class="btn-primary">
-          <span>▶</span> ИГРАТЬ (Enter)
+          <span>▶</span> <span id="btn-start-text">ИГРАТЬ (Enter)</span>
         </button>
 
         <!-- Подсказки по управлению для ПК и телефонов -->
         <div class="pc-keys-helper">
           <div class="pc-key-line">
-            <span>💻 <b>Управление на ПК:</b></span>
+            <span id="pc-keys-title">💻 <b>Управление на ПК:</b></span>
             <div>
               <span class="key-badge">🡄</span>
               <span class="key-badge">🡆</span>
-              <span style="font-size: 11px;">Стрелочки</span>
+              <span id="pc-keys-arrows-label" style="font-size: 11px;">Стрелочки</span>
             </div>
           </div>
           <div class="pc-key-line">
-            <span>Альтернатива:</span>
+            <span id="pc-keys-alt-label">Альтернатива:</span>
             <div>
               <span class="key-badge">A</span>
               <span class="key-badge">D</span>
             </div>
           </div>
           <div class="pc-key-line">
-            <span>Пауза / Старт:</span>
+            <span id="pc-keys-pause-label">Пауза / Старт:</span>
             <div>
-              <span class="key-badge">Пробел</span>
+              <span class="key-badge" id="key-space">Пробел</span>
               <span class="key-badge">Enter</span>
             </div>
           </div>
@@ -102,7 +105,7 @@
 
         <div class="tilt-toggle-row">
           <div class="tilt-label">
-            <span>📱</span> Наклон телефона (акселерометр)
+            <span id="tilt-label-text"><span>📱</span> Наклон телефона (акселерометр)</span>
           </div>
           <label class="switch">
             <input type="checkbox" id="tilt-toggle">
@@ -110,8 +113,13 @@
           </label>
         </div>
 
+        <div class="lang-toggle-row">
+          <button id="btn-lang-ru" class="btn-lang active" type="button">🇷🇺 Русский</button>
+          <button id="btn-lang-en" class="btn-lang" type="button">🇬🇧 English</button>
+        </div>
+
         <div class="controls-hint">
-          <span>📱 На смартфоне: кнопки ◀ ▶, свайпы или наклон</span>
+          <span id="controls-hint-text">📱 На смартфоне: кнопки ◀ ▶, свайпы или наклон</span>
         </div>
       </div>
     </div>
@@ -119,13 +127,13 @@
     <!-- Модальное окно: Пауза -->
     <div id="pause-modal" class="modal-overlay hidden">
       <div class="modal-content">
-        <h2 class="modal-title">Пауза</h2>
-        <p class="modal-subtitle">Лягушонок отдыхает в пруду</p>
+        <h2 id="pause-title" class="modal-title">Пауза</h2>
+        <p id="pause-subtitle" class="modal-subtitle">Лягушонок отдыхает в пруду</p>
         <button id="btn-resume" class="btn-primary">
-          <span>▶</span> ПРОДОЛЖИТЬ (Пробел)
+          <span>▶</span> <span id="btn-resume-text">ПРОДОЛЖИТЬ (Пробел)</span>
         </button>
         <button id="btn-restart-pause" class="btn-secondary">
-          Заново
+          <span id="btn-restart-pause-text">Заново</span>
         </button>
       </div>
     </div>
@@ -134,32 +142,35 @@
     <div id="gameover-modal" class="modal-overlay hidden">
       <div class="modal-content">
         <div style="font-size: 52px; margin-bottom: 4px;">💦</div>
-        <h2 class="modal-title">Бултых!</h2>
-        <p class="modal-subtitle">Лягушонок упал в воду</p>
+        <h2 id="gameover-title" class="modal-title">Бултых!</h2>
+        <p id="gameover-subtitle" class="modal-subtitle">Лягушонок упал в воду</p>
 
         <div id="new-record-badge" style="display: none; background: #ffb300; color: #000; font-weight: 800; font-size: 13px; border-radius: 12px; padding: 4px 10px; margin-bottom: 12px;">
-          🏆 НОВЫЙ РЕКОРД!
+          🏆 <span id="new-record-text">НОВЫЙ РЕКОРД!</span>
         </div>
 
         <div class="stats-grid">
           <div class="stat-box">
-            <div class="stat-title">Счет</div>
+            <div id="stat-score-label" class="stat-title">Счет</div>
             <div id="final-score" class="stat-num">0</div>
           </div>
           <div class="stat-box">
-            <div class="stat-title">Рекорд</div>
+            <div id="stat-record-label" class="stat-title">Рекорд</div>
             <div id="final-high" class="stat-num">0</div>
           </div>
           <div class="stat-box" style="grid-column: span 2;">
-            <div class="stat-title">Поймано мушек</div>
+            <div id="stat-flies-label" class="stat-title">Поймано мушек</div>
             <div class="stat-num" style="color: #64ffda;">
               <span id="final-flies">0</span> 🪰
             </div>
           </div>
         </div>
 
+        <button id="btn-revive" class="btn-primary" style="background: linear-gradient(135deg, #ffb300, #ff8f00); margin-bottom: 8px;">
+          <span>⚡</span> <span id="btn-revive-text">СПАСТИ ЛЯГУШОНКА (РЕКЛАМА)</span>
+        </button>
         <button id="btn-restart" class="btn-primary">
-          <span>🔄</span> ИГРАТЬ СНОВА (Enter / Пробел)
+          <span>🔄</span> <span id="btn-restart-text">ИГРАТЬ СНОВА (Enter / Пробел)</span>
         </button>
       </div>
     </div>
@@ -168,10 +179,11 @@
   <!-- Предупреждение о горизонтальном режиме (только для смартфонов) -->
   <div id="landscape-warning">
     <div style="font-size: 48px; margin-bottom: 12px;">📱🔄</div>
-    <h2>Поверните телефон</h2>
-    <p style="margin-top: 8px; color: #a5d6a7;">Для максимального удобства игра создана для вертикального режима.</p>
+    <h2 id="landscape-title">Поверните телефон</h2>
+    <p id="landscape-text" style="margin-top: 8px; color: #a5d6a7;">Для максимального удобства игра создана для вертикального режима.</p>
   </div>
 
+  <script src="bridge.js"></script>
   <script src="game.js"></script>
 </body>
 </html>

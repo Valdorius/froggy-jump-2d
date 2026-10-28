@@ -1,0 +1,42 @@
+{
+  "advertisement": {
+    "interstitial": {
+      "enabled": true
+    },
+    "rewarded": {
+      "enabled": true
+    }
+  },
+  "platforms": {
+    "yandex": {
+      "advertisement": {
+        "interstitial": {
+          "enabled": true
+        },
+        "rewarded": {
+          "enabled": true
+        }
+      }
+    },
+    "vk": {
+      "advertisement": {
+        "interstitial": {
+          "enabled": true
+        },
+        "rewarded": {
+          "enabled": true
+        }
+      }
+    },
+    "crazy_games": {
+      "advertisement": {
+        "interstitial": {
+          "enabled": true
+        },
+        "rewarded": {
+          "enabled": true
+        }
+      }
+    }
+  }
+}

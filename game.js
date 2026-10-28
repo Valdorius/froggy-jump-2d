@@ -33,6 +33,11 @@
     constructor() {
       this.ctx = null;
       this.enabled = localStorage.getItem('froggy_sound') !== 'false';
+      this.adMuted = false;
+    }
+
+    setMuted(val) {
+      this.adMuted = Boolean(val);
     }
 
     init() {
@@ -54,7 +59,7 @@
     }
 
     playJump() {
-      if (!this.enabled || !this.ctx) return;
+      if (!this.enabled || this.adMuted || !this.ctx) return;
       try {
         const now = this.ctx.currentTime;
         const osc = this.ctx.createOscillator();
@@ -76,7 +81,7 @@
     }
 
     playSuperJump() {
-      if (!this.enabled || !this.ctx) return;
+      if (!this.enabled || this.adMuted || !this.ctx) return;
       try {
         const now = this.ctx.currentTime;
         const osc = this.ctx.createOscillator();
@@ -98,7 +103,7 @@
     }
 
     playFlyCatch() {
-      if (!this.enabled || !this.ctx) return;
+      if (!this.enabled || this.adMuted || !this.ctx) return;
       try {
         const now = this.ctx.currentTime;
         // Двухтональный звонкий перелив
@@ -123,7 +128,7 @@
     }
 
     playBreak() {
-      if (!this.enabled || !this.ctx) return;
+      if (!this.enabled || this.adMuted || !this.ctx) return;
       try {
         const now = this.ctx.currentTime;
         const osc = this.ctx.createOscillator();
@@ -145,7 +150,7 @@
     }
 
     playShield() {
-      if (!this.enabled || !this.ctx) return;
+      if (!this.enabled || this.adMuted || !this.ctx) return;
       try {
         const now = this.ctx.currentTime;
         const osc = this.ctx.createOscillator();
@@ -168,7 +173,7 @@
     }
 
     playGameOver() {
-      if (!this.enabled || !this.ctx) return;
+      if (!this.enabled || this.adMuted || !this.ctx) return;
       try {
         const now = this.ctx.currentTime;
         [440, 370, 293].forEach((freq, idx) => {
@@ -193,6 +198,152 @@
   }
 
   const sound = new SoundManager();
+
+  // --- Локализация (RU / EN) ---
+  const I18N = {
+    ru: {
+      hud_score: 'Высота:',
+      menu_title: 'Froggy Jump',
+      menu_subtitle: 'Прыгай по кувшинкам, лови мушек и избегай сухих листьев!',
+      menu_high: 'Лучший рекорд',
+      btn_start: 'ИГРАТЬ (Enter)',
+      pc_keys_title: '💻 <b>Управление на ПК:</b>',
+      pc_arrows: 'Стрелочки',
+      pc_alt: 'Альтернатива:',
+      pc_pause: 'Пауза / Старт:',
+      key_space: 'Пробел',
+      tilt_label: '<span>📱</span> Наклон телефона (акселерометр)',
+      controls_hint: '📱 На смартфоне: кнопки ◀ ▶, свайпы или наклон',
+      pause_title: 'Пауза',
+      pause_subtitle: 'Лягушонок отдыхает в пруду',
+      btn_resume: 'ПРОДОЛЖИТЬ (Пробел)',
+      btn_restart_pause: 'Заново',
+      gameover_title: 'Бултых!',
+      gameover_subtitle: 'Лягушонок упал в воду',
+      new_record: 'НОВЫЙ РЕКОРД!',
+      stat_score: 'Счет',
+      stat_record: 'Рекорд',
+      stat_flies: 'Поймано мушек',
+      btn_revive: 'СПАСТИ ЛЯГУШОНКА (РЕКЛАМА)',
+      btn_restart: 'ИГРАТЬ СНОВА (Enter / Пробел)',
+      landscape_title: 'Поверните телефон',
+      landscape_text: 'Для максимального удобства игра создана для вертикального режима.',
+      // Floating game texts
+      shield_saved: 'ЩИТ СПАС ВАС!',
+      mega_jump: 'МЕГА ПРЫЖОК!',
+      revived: 'ВОЗРОЖДЕНИЕ!',
+      shield_bubble: 'ЩИТ-ПУЗЫРЬ!',
+      wings_fly: 'ПОЛЕТ СТРЕКОЗЫ!'
+    },
+    en: {
+      hud_score: 'Height:',
+      menu_title: 'Froggy Jump',
+      menu_subtitle: 'Hop on lily pads, catch juicy flies, and avoid brittle leaves!',
+      menu_high: 'Best Record',
+      btn_start: 'PLAY (Enter)',
+      pc_keys_title: '💻 <b>PC Controls:</b>',
+      pc_arrows: 'Arrow Keys',
+      pc_alt: 'Alternative:',
+      pc_pause: 'Pause / Start:',
+      key_space: 'Space',
+      tilt_label: '<span>📱</span> Tilt Device (Accelerometer)',
+      controls_hint: '📱 Mobile: ◀ ▶ buttons, swipe or tilt',
+      pause_title: 'Paused',
+      pause_subtitle: 'Froggy is taking a rest in the pond',
+      btn_resume: 'RESUME (Space)',
+      btn_restart_pause: 'Restart',
+      gameover_title: 'Splash!',
+      gameover_subtitle: 'Froggy fell into the pond',
+      new_record: 'NEW RECORD!',
+      stat_score: 'Score',
+      stat_record: 'Record',
+      stat_flies: 'Flies Caught',
+      btn_revive: 'REVIVE FROGGY (AD)',
+      btn_restart: 'PLAY AGAIN (Enter / Space)',
+      landscape_title: 'Please Rotate Device',
+      landscape_text: 'This game is designed to be played in portrait mode.',
+      // Floating game texts
+      shield_saved: 'SHIELD SAVED YOU!',
+      mega_jump: 'MEGA JUMP!',
+      revived: 'REVIVED!',
+      shield_bubble: 'SHIELD BUBBLE!',
+      wings_fly: 'DRAGONFLY FLIGHT!'
+    }
+  };
+
+  let currentLang = 'ru';
+
+  function t(key) {
+    const dict = I18N[currentLang] || I18N.ru;
+    return dict[key] || key;
+  }
+
+  function setLanguage(lang) {
+    if (lang !== 'ru' && lang !== 'en') lang = 'ru';
+    currentLang = lang;
+    localStorage.setItem('froggy_lang', lang);
+
+    const dict = I18N[lang];
+
+    const safeSetText = (id, text) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = text;
+    };
+    const safeSetHTML = (id, html) => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = html;
+    };
+
+    safeSetText('hud-score-label', dict.hud_score);
+    safeSetText('menu-title', dict.menu_title);
+    safeSetText('menu-subtitle', dict.menu_subtitle);
+    safeSetText('menu-high-label', dict.menu_high);
+    safeSetText('btn-start-text', dict.btn_start);
+    safeSetHTML('pc-keys-title', dict.pc_keys_title);
+    safeSetText('pc-keys-arrows-label', dict.pc_arrows);
+    safeSetText('pc-keys-alt-label', dict.pc_alt);
+    safeSetText('pc-keys-pause-label', dict.pc_pause);
+    safeSetText('key-space', dict.key_space);
+    safeSetHTML('tilt-label-text', dict.tilt_label);
+    safeSetText('controls-hint-text', dict.controls_hint);
+    safeSetText('pause-title', dict.pause_title);
+    safeSetText('pause-subtitle', dict.pause_subtitle);
+    safeSetText('btn-resume-text', dict.btn_resume);
+    safeSetText('btn-restart-pause-text', dict.btn_restart_pause);
+    safeSetText('gameover-title', dict.gameover_title);
+    safeSetText('gameover-subtitle', dict.gameover_subtitle);
+    safeSetText('new-record-text', dict.new_record);
+    safeSetText('stat-score-label', dict.stat_score);
+    safeSetText('stat-record-label', dict.stat_record);
+    safeSetText('stat-flies-label', dict.stat_flies);
+    safeSetText('btn-revive-text', dict.btn_revive);
+    safeSetText('btn-restart-text', dict.btn_restart);
+    safeSetText('landscape-title', dict.landscape_title);
+    safeSetText('landscape-text', dict.landscape_text);
+
+    // Кнопка в HUD и кнопки переключения в меню
+    const btnLang = document.getElementById('btn-lang');
+    if (btnLang) {
+      btnLang.textContent = lang === 'ru' ? 'RU' : 'EN';
+    }
+
+    const btnRu = document.getElementById('btn-lang-ru');
+    const btnEn = document.getElementById('btn-lang-en');
+    if (btnRu) btnRu.classList.toggle('active', lang === 'ru');
+    if (btnEn) btnEn.classList.toggle('active', lang === 'en');
+  }
+
+  function detectLanguage() {
+    const saved = localStorage.getItem('froggy_lang');
+    if (saved === 'ru' || saved === 'en') return saved;
+
+    if (window.PlatformBridge && window.PlatformBridge.language) {
+      return window.PlatformBridge.language.toLowerCase().startsWith('ru') ? 'ru' : 'en';
+    }
+
+    const navLang = (navigator.language || navigator.userLanguage || 'ru').toLowerCase();
+    return navLang.startsWith('ru') || navLang.startsWith('be') || navLang.startsWith('uk') ? 'ru' : 'en';
+  }
 
   // --- Типы платформ ---
   const PLATFORM_TYPES = {
@@ -226,6 +377,7 @@
   let highScore = parseInt(localStorage.getItem('froggy_highscore') || '0', 10);
   let cameraY = 0;
   let lastTime = 0;
+  let revivesUsed = 0;
 
   // --- Управление ---
   const keys = { left: false, right: false };
@@ -460,7 +612,7 @@
       if (boost > 1.2) {
         sound.playSuperJump();
         addGoldenSparkles(this.x, this.y + 20);
-        floatingTexts.push(new FloatingText('МЕГА ПРЫЖОК!', this.x, this.y, '#ffd54f', 20));
+        floatingTexts.push(new FloatingText(t('mega_jump'), this.x, this.y, '#ffd54f', 20));
       } else {
         sound.playJump();
         addWaterSplash(this.x, this.y + 20);
@@ -1008,12 +1160,12 @@
             frog.wingsTimer = 210; // 3.5 секунды
             sound.playSuperJump();
             addGoldenSparkles(ix, iy);
-            floatingTexts.push(new FloatingText('ПОЛЕТ СТРЕКОЗЫ!', ix, iy, '#ffe082', 20));
+            floatingTexts.push(new FloatingText(t('wings_fly'), ix, iy, '#ffe082', 20));
           } else if (p.item === ITEM_TYPES.SHIELD) {
             frog.hasShield = true;
             sound.playShield();
             addGoldenSparkles(ix, iy);
-            floatingTexts.push(new FloatingText('ЩИТ-ПУЗЫРЬ!', ix, iy, '#80deea', 20));
+            floatingTexts.push(new FloatingText(t('shield_bubble'), ix, iy, '#80deea', 20));
           }
           p.item = ITEM_TYPES.NONE;
           updateHUD();
@@ -1055,7 +1207,7 @@
         frog.y = cameraY + height - 100;
         frog.jump(1.6);
         sound.playShield();
-        floatingTexts.push(new FloatingText('ЩИТ СПАС ВАС!', frog.x, frog.y, '#80deea', 22));
+        floatingTexts.push(new FloatingText(t('shield_saved'), frog.x, frog.y, '#80deea', 22));
       } else {
         triggerGameOver();
       }
@@ -1092,20 +1244,40 @@
     requestAnimationFrame(gameLoop);
   }
 
+  // --- Интеграция с платформой (пауза, звук) ---
+  window.onPlatformPauseChange = function (isPaused) {
+    if (isPaused) {
+      if (gameState === STATE.PLAYING) {
+        pauseGame();
+      }
+    }
+  };
+
+  window.onPlatformAudioChange = function (isAudioEnabled) {
+    sound.setMuted(!isAudioEnabled);
+  };
+
   // --- Управление состояниями игры ---
   function startGame() {
     sound.init();
+    revivesUsed = 0;
     initWorld();
     gameState = STATE.PLAYING;
     document.getElementById('menu-modal').classList.add('hidden');
     document.getElementById('gameover-modal').classList.add('hidden');
     document.getElementById('pause-modal').classList.add('hidden');
+    if (window.PlatformBridge) {
+      window.PlatformBridge.gameplayStart();
+    }
   }
 
   function pauseGame() {
     if (gameState === STATE.PLAYING) {
       gameState = STATE.PAUSED;
       document.getElementById('pause-modal').classList.remove('hidden');
+      if (window.PlatformBridge) {
+        window.PlatformBridge.gameplayStop();
+      }
     }
   }
 
@@ -1113,18 +1285,28 @@
     if (gameState === STATE.PAUSED) {
       gameState = STATE.PLAYING;
       document.getElementById('pause-modal').classList.add('hidden');
+      if (window.PlatformBridge) {
+        window.PlatformBridge.gameplayStart();
+      }
     }
   }
 
   function triggerGameOver() {
     gameState = STATE.GAMEOVER;
     sound.playGameOver();
+    if (window.PlatformBridge) {
+      window.PlatformBridge.gameplayStop();
+    }
 
     let isNewRecord = false;
     if (score > highScore) {
       highScore = score;
       localStorage.setItem('froggy_highscore', highScore);
       isNewRecord = true;
+    }
+
+    if (window.PlatformBridge) {
+      window.PlatformBridge.saveProgress({ highScore });
     }
 
     document.getElementById('final-score').textContent = score;
@@ -1136,7 +1318,48 @@
       recordBadge.style.display = isNewRecord ? 'block' : 'none';
     }
 
+    const btnRevive = document.getElementById('btn-revive');
+    if (btnRevive) {
+      btnRevive.style.display = revivesUsed < 1 ? 'block' : 'none';
+    }
+
     document.getElementById('gameover-modal').classList.remove('hidden');
+  }
+
+  function reviveFrog() {
+    revivesUsed++;
+    let targetPlatform = null;
+    let minDiff = Infinity;
+    for (const p of platforms) {
+      const screenY = p.y - cameraY;
+      if (screenY > 100 && screenY < height - 60) {
+        if (Math.abs(screenY - (height - 180)) < minDiff) {
+          minDiff = Math.abs(screenY - (height - 180));
+          targetPlatform = p;
+        }
+      }
+    }
+
+    if (targetPlatform) {
+      frog.x = targetPlatform.x + targetPlatform.width / 2;
+      frog.y = targetPlatform.y - frog.height / 2;
+    } else {
+      frog.x = width / 2;
+      frog.y = cameraY + height - 160;
+      const safePlat = new Platform(frog.x - 45, frog.y + 40, PLATFORM_TYPES.NORMAL);
+      safePlat.width = 90;
+      platforms.push(safePlat);
+    }
+
+    frog.vx = 0;
+    frog.hasShield = true;
+    frog.jump(1.6);
+    gameState = STATE.PLAYING;
+    document.getElementById('gameover-modal').classList.add('hidden');
+    floatingTexts.push(new FloatingText(t('revived'), frog.x, frog.y, '#ffd54f', 24));
+    if (window.PlatformBridge) {
+      window.PlatformBridge.gameplayStart();
+    }
   }
 
   function updateHUD() {
@@ -1182,8 +1405,12 @@
 
         // Старт / Перезапуск игры клавишами Space или Enter
         if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space') {
-          if (gameState === STATE.MENU || gameState === STATE.GAMEOVER) {
+          if (gameState === STATE.MENU) {
             startGame();
+            return;
+          }
+          if (gameState === STATE.GAMEOVER) {
+            restartGameWithAd();
             return;
           }
         }
@@ -1321,19 +1548,97 @@
       });
     }
 
+    // Переключение языка в HUD
+    const btnLang = document.getElementById('btn-lang');
+    if (btnLang) {
+      btnLang.addEventListener('click', () => {
+        sound.init();
+        setLanguage(currentLang === 'ru' ? 'en' : 'ru');
+      });
+    }
+
+    // Переключение языка в меню (RU / EN)
+    const btnLangRu = document.getElementById('btn-lang-ru');
+    if (btnLangRu) {
+      btnLangRu.addEventListener('click', () => {
+        sound.init();
+        setLanguage('ru');
+      });
+    }
+    const btnLangEn = document.getElementById('btn-lang-en');
+    if (btnLangEn) {
+      btnLangEn.addEventListener('click', () => {
+        sound.init();
+        setLanguage('en');
+      });
+    }
+
+    // Кнопка возрождения (Rewarded Video)
+    const btnRevive = document.getElementById('btn-revive');
+    if (btnRevive) {
+      btnRevive.addEventListener('click', () => {
+        sound.init();
+        if (window.PlatformBridge) {
+          window.PlatformBridge.showRewardedVideo(() => {
+            reviveFrog();
+          });
+        } else {
+          reviveFrog();
+        }
+      });
+    }
+
+    // Перезапуск с показом рекламы (с учетом кулдауна)
+    const restartGameWithAd = () => {
+      sound.init();
+      if (window.PlatformBridge) {
+        window.PlatformBridge.showFullscreenAdv(() => {
+          startGame();
+        });
+      } else {
+        startGame();
+      }
+    };
+
     // Кнопки интерфейса
-    document.getElementById('btn-start').addEventListener('click', startGame);
-    document.getElementById('btn-resume').addEventListener('click', resumeGame);
-    document.getElementById('btn-restart').addEventListener('click', startGame);
-    document.getElementById('btn-restart-pause').addEventListener('click', startGame);
+    document.getElementById('btn-start').addEventListener('click', () => {
+      sound.init();
+      startGame();
+    });
+    document.getElementById('btn-resume').addEventListener('click', () => {
+      sound.init();
+      resumeGame();
+    });
+    document.getElementById('btn-restart').addEventListener('click', restartGameWithAd);
+    document.getElementById('btn-restart-pause').addEventListener('click', restartGameWithAd);
   }
 
   // --- Инициализация при старте ---
-  window.addEventListener('DOMContentLoaded', () => {
+  window.addEventListener('DOMContentLoaded', async () => {
     resizeCanvas();
     setupInputHandlers();
     initWorld();
+    setLanguage(detectLanguage());
     updateUI();
+
+    if (window.PlatformBridge) {
+      await window.PlatformBridge.init();
+      // Если игрок не сохранял выбор вручную, применяем язык платформы
+      if (!localStorage.getItem('froggy_lang')) {
+        setLanguage(detectLanguage());
+      }
+      try {
+        const saved = await window.PlatformBridge.loadProgress();
+        if (saved && saved.highScore !== undefined) {
+          if (saved.highScore > highScore) {
+            highScore = saved.highScore;
+            localStorage.setItem('froggy_highscore', highScore);
+            updateUI();
+          }
+        }
+      } catch (e) {}
+    }
+
     requestAnimationFrame(gameLoop);
   });
 
