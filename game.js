@@ -1238,8 +1238,31 @@
     }
   }
 
+  // --- Фиксированный шаг физики (Fixed Timestep 60 FPS) ---
+  // Гарантирует одинаковую скорость игры на экранах любой герцовки (60/120/144/240 Гц)
+  const FIXED_STEP = 1000 / 60; // 16.6667 мс
+  let accumulator = 0;
+  let lastFrameTime = 0;
+
   function gameLoop(time) {
-    update();
+    if (!lastFrameTime) {
+      lastFrameTime = time;
+    }
+    let dt = time - lastFrameTime;
+    lastFrameTime = time;
+
+    // Защита от резких скачков времени при сворачивании вкладки (не более 100 мс)
+    if (dt > 100) dt = 100;
+    if (dt < 0) dt = 0;
+
+    accumulator += dt;
+
+    // Обновляем физику строго с частотой 60 раз в секунду
+    while (accumulator >= FIXED_STEP) {
+      update();
+      accumulator -= FIXED_STEP;
+    }
+
     render();
     requestAnimationFrame(gameLoop);
   }
@@ -1266,6 +1289,8 @@
     document.getElementById('menu-modal').classList.add('hidden');
     document.getElementById('gameover-modal').classList.add('hidden');
     document.getElementById('pause-modal').classList.add('hidden');
+    lastFrameTime = performance.now();
+    accumulator = 0;
     if (window.PlatformBridge) {
       window.PlatformBridge.gameplayStart();
     }
@@ -1285,6 +1310,8 @@
     if (gameState === STATE.PAUSED) {
       gameState = STATE.PLAYING;
       document.getElementById('pause-modal').classList.add('hidden');
+      lastFrameTime = performance.now();
+      accumulator = 0;
       if (window.PlatformBridge) {
         window.PlatformBridge.gameplayStart();
       }
@@ -1356,6 +1383,8 @@
     frog.jump(1.6);
     gameState = STATE.PLAYING;
     document.getElementById('gameover-modal').classList.add('hidden');
+    lastFrameTime = performance.now();
+    accumulator = 0;
     floatingTexts.push(new FloatingText(t('revived'), frog.x, frog.y, '#ffd54f', 24));
     if (window.PlatformBridge) {
       window.PlatformBridge.gameplayStart();
