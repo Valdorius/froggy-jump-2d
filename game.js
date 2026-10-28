@@ -206,17 +206,12 @@
       menu_title: 'Froggy Jump',
       menu_subtitle: 'Прыгай по кувшинкам, лови мушек и избегай сухих листьев!',
       menu_high: 'Лучший рекорд',
-      btn_start: 'ИГРАТЬ (Enter)',
-      pc_keys_title: '💻 <b>Управление на ПК:</b>',
-      pc_arrows: 'Стрелочки',
-      pc_alt: 'Альтернатива:',
-      pc_pause: 'Пауза / Старт:',
-      key_space: 'Пробел',
+      btn_start: 'ИГРАТЬ',
       tilt_label: '<span>📱</span> Наклон телефона (акселерометр)',
-      controls_hint: '📱 На смартфоне: кнопки ◀ ▶, свайпы или наклон',
+      controls_hint: '📱 Управление: кнопки ◀ ▶, касания или наклон',
       pause_title: 'Пауза',
       pause_subtitle: 'Лягушонок отдыхает в пруду',
-      btn_resume: 'ПРОДОЛЖИТЬ (Пробел)',
+      btn_resume: 'ПРОДОЛЖИТЬ',
       btn_restart_pause: 'Заново',
       gameover_title: 'Бултых!',
       gameover_subtitle: 'Лягушонок упал в воду',
@@ -225,7 +220,7 @@
       stat_record: 'Рекорд',
       stat_flies: 'Поймано мушек',
       btn_revive: 'СПАСТИ ЛЯГУШОНКА (РЕКЛАМА)',
-      btn_restart: 'ИГРАТЬ СНОВА (Enter / Пробел)',
+      btn_restart: 'ИГРАТЬ СНОВА',
       landscape_title: 'Поверните телефон',
       landscape_text: 'Для максимального удобства игра создана для вертикального режима.',
       // Floating game texts
@@ -240,17 +235,12 @@
       menu_title: 'Froggy Jump',
       menu_subtitle: 'Hop on lily pads, catch juicy flies, and avoid brittle leaves!',
       menu_high: 'Best Record',
-      btn_start: 'PLAY (Enter)',
-      pc_keys_title: '💻 <b>PC Controls:</b>',
-      pc_arrows: 'Arrow Keys',
-      pc_alt: 'Alternative:',
-      pc_pause: 'Pause / Start:',
-      key_space: 'Space',
+      btn_start: 'PLAY',
       tilt_label: '<span>📱</span> Tilt Device (Accelerometer)',
-      controls_hint: '📱 Mobile: ◀ ▶ buttons, swipe or tilt',
+      controls_hint: '📱 Mobile: ◀ ▶ buttons, touch or tilt',
       pause_title: 'Paused',
       pause_subtitle: 'Froggy is taking a rest in the pond',
-      btn_resume: 'RESUME (Space)',
+      btn_resume: 'RESUME',
       btn_restart_pause: 'Restart',
       gameover_title: 'Splash!',
       gameover_subtitle: 'Froggy fell into the pond',
@@ -259,7 +249,7 @@
       stat_record: 'Record',
       stat_flies: 'Flies Caught',
       btn_revive: 'REVIVE FROGGY (AD)',
-      btn_restart: 'PLAY AGAIN (Enter / Space)',
+      btn_restart: 'PLAY AGAIN',
       landscape_title: 'Please Rotate Device',
       landscape_text: 'This game is designed to be played in portrait mode.',
       // Floating game texts
@@ -299,11 +289,6 @@
     safeSetText('menu-subtitle', dict.menu_subtitle);
     safeSetText('menu-high-label', dict.menu_high);
     safeSetText('btn-start-text', dict.btn_start);
-    safeSetHTML('pc-keys-title', dict.pc_keys_title);
-    safeSetText('pc-keys-arrows-label', dict.pc_arrows);
-    safeSetText('pc-keys-alt-label', dict.pc_alt);
-    safeSetText('pc-keys-pause-label', dict.pc_pause);
-    safeSetText('key-space', dict.key_space);
     safeSetHTML('tilt-label-text', dict.tilt_label);
     safeSetText('controls-hint-text', dict.controls_hint);
     safeSetText('pause-title', dict.pause_title);

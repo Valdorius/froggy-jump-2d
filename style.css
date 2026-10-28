@@ -48,11 +48,6 @@ html, body {
     border: 2px solid rgba(76, 175, 80, 0.45);
     box-shadow: 0 0 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(76, 175, 80, 0.25);
   }
-
-  /* Подсказка управления на ПК сбоку или снизу */
-  .desktop-controls-legend {
-    display: flex !important;
-  }
 }
 
 #gameCanvas {
@@ -137,13 +132,13 @@ html, body {
   background: rgba(46, 125, 50, 0.95);
 }
 
-/* Экранные сенсорные кнопки управления */
+/* Сенсорные кнопки управления (мобильный режим) */
 #touch-controls {
   position: absolute;
-  bottom: calc(env(safe-area-inset-bottom, 15px) + 12px);
+  bottom: calc(env(safe-area-inset-bottom, 15px) + 16px);
   left: 0;
   width: 100%;
-  padding: 0 20px;
+  padding: 0 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -155,68 +150,30 @@ html, body {
   pointer-events: auto;
   width: 76px;
   height: 76px;
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 2px solid rgba(255, 255, 255, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.5);
   border-radius: 50%;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   color: #ffffff;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-  transition: background 0.15s, transform 0.1s, opacity 0.2s;
+  transition: background 0.15s, transform 0.1s;
   touch-action: none;
   cursor: pointer;
 }
 
 .touch-btn-icon {
-  font-size: 26px;
+  font-size: 32px;
   line-height: 1;
 }
 
-.touch-btn-key {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #c8e6c9;
-  margin-top: 2px;
-  background: rgba(0,0,0,0.3);
-  padding: 1px 5px;
-  border-radius: 6px;
-}
-
 .touch-btn.active, .touch-btn:active {
-  background: rgba(76, 175, 80, 0.7);
+  background: rgba(76, 175, 80, 0.85);
   border-color: #81c784;
   transform: scale(0.92);
-}
-
-/* На ПК с мышью кнопки делаем более полупрозрачными, но интерактивными */
-@media (hover: hover) and (pointer: fine) {
-  .touch-btn {
-    opacity: 0.45;
-  }
-  .touch-btn:hover {
-    opacity: 0.95;
-    background: rgba(76, 175, 80, 0.45);
-  }
-}
-
-/* Подсказка управления на ПК */
-.desktop-controls-legend {
-  display: none;
-  background: rgba(14, 28, 22, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 14px;
-  padding: 6px 14px;
-  font-size: 12px;
-  color: #a5d6a7;
-  font-weight: 600;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .key-badge {
@@ -380,27 +337,6 @@ html, body {
 
 .btn-secondary:active {
   background: rgba(255, 255, 255, 0.25);
-}
-
-/* Блок подсказок по клавишам на ПК */
-.pc-keys-helper {
-  margin-top: 16px;
-  background: rgba(0, 0, 0, 0.28);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
-  padding: 10px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  text-align: left;
-}
-
-.pc-key-line {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 12px;
-  color: #c8e6c9;
 }
 
 .controls-hint {
