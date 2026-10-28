@@ -1238,33 +1238,36 @@
     }
   }
 
-  // --- Фиксированный шаг физики (Fixed Timestep 60 FPS) ---
-  // Гарантирует одинаковую скорость игры на экранах любой герцовки (60/120/144/240 Гц)
-  const FIXED_STEP = 1000 / 60; // 16.6667 мс
-  let accumulator = 0;
+  // --- ЖЕСТКИЙ ЛОК 60 FPS (Hard 60 FPS Frame Limiter) ---
+  // На экранах 120/144/165/240 Гц лишние вызовы отсекаются, гарантируя строго 60 FPS
+  const TARGET_FPS = 60;
+  const FRAME_INTERVAL = 1000 / TARGET_FPS; // 16.66667 мс
   let lastFrameTime = 0;
 
   function gameLoop(time) {
-    if (!lastFrameTime) {
-      lastFrameTime = time;
-    }
-    let dt = time - lastFrameTime;
-    lastFrameTime = time;
-
-    // Защита от резких скачков времени при сворачивании вкладки (не более 100 мс)
-    if (dt > 100) dt = 100;
-    if (dt < 0) dt = 0;
-
-    accumulator += dt;
-
-    // Обновляем физику строго с частотой 60 раз в секунду
-    while (accumulator >= FIXED_STEP) {
-      update();
-      accumulator -= FIXED_STEP;
-    }
-
-    render();
     requestAnimationFrame(gameLoop);
+
+    const now = typeof time === 'number' && time > 0 ? time : performance.now();
+
+    if (!lastFrameTime) {
+      lastFrameTime = now;
+      update();
+      render();
+      return;
+    }
+
+    const elapsed = now - lastFrameTime;
+
+    // Жесткое отсечение: если с прошлого кадра прошло меньше 16.6 мс, пропускаем
+    if (elapsed < FRAME_INTERVAL) {
+      return;
+    }
+
+    // Выравниваем время следующего кадра
+    lastFrameTime = now - (elapsed % FRAME_INTERVAL);
+
+    update();
+    render();
   }
 
   // --- Интеграция с платформой (пауза, звук) ---
@@ -1290,7 +1293,6 @@
     document.getElementById('gameover-modal').classList.add('hidden');
     document.getElementById('pause-modal').classList.add('hidden');
     lastFrameTime = performance.now();
-    accumulator = 0;
     if (window.PlatformBridge) {
       window.PlatformBridge.gameplayStart();
     }
@@ -1311,7 +1313,6 @@
       gameState = STATE.PLAYING;
       document.getElementById('pause-modal').classList.add('hidden');
       lastFrameTime = performance.now();
-      accumulator = 0;
       if (window.PlatformBridge) {
         window.PlatformBridge.gameplayStart();
       }
@@ -1384,7 +1385,6 @@
     gameState = STATE.PLAYING;
     document.getElementById('gameover-modal').classList.add('hidden');
     lastFrameTime = performance.now();
-    accumulator = 0;
     floatingTexts.push(new FloatingText(t('revived'), frog.x, frog.y, '#ffd54f', 24));
     if (window.PlatformBridge) {
       window.PlatformBridge.gameplayStart();
