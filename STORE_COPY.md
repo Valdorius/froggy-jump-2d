@@ -84,3 +84,16 @@ Help the adorable green frog hop to the stars. Bounce off floating water lily pa
 | **In-App Purchases (IAP)** | **Выключено** | |
 | **Leaderboards** | **Выключено** | Рекорд сохраняется в облаке игрока |
 | **Social / Communities** | **Выключено** | |
+
+---
+
+## 🎨 Графические материалы для загрузки (в папке `promo/`)
+| Назначение | Файл | Разрешение | Формат |
+| :--- | :--- | :--- | :--- |
+| **Иконка / Аватар** | `promo/froggy_square_800x800.png` | 800×800 (1:1) | PNG |
+| **Вертикальная обложка** | `promo/froggy_portrait_1080x1920.png` | 1080×1920 (9:16) | PNG |
+| **Горизонтальный баннер** | `promo/froggy_landscape_1920x1080.png` | 1920×1080 (16:9) | PNG |
+| **Скриншот 1 (Высота / Космос)** | `promo/screenshot_1_altitude_1080x1920.png` | 1080×1920 (9:16) | PNG |
+| **Скриншот 2 (Пузырь-щит)** | `promo/screenshot_2_bubble_1080x1920.png` | 1080×1920 (9:16) | PNG |
+| **Скриншот 3 (Крылья стрекозы)** | `promo/screenshot_3_wings_1080x1920.png` | 1080×1920 (9:16) | PNG |
+| **Скриншот 4 (Ловля мошек)** | `promo/screenshot_4_hop_1080x1920.png` | 1080×1920 (9:16) | PNG |
